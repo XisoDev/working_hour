@@ -1,5 +1,5 @@
 {
-    "name": "rennokki/schedule",
+    "name": "xisodev/working_hours",
     "description": "Schedule is a package that helps tracking schedules for your models. If you have workers in a company, you can set schedules for them and see their availability though the time.",
     "keywords": [
         "schedule",
@@ -11,18 +11,18 @@
         "opening",
         "hours"
     ],
-    "homepage": "https://github.com/rennokki/schedule",
+    "homepage": "https://github.com/XisoDev/working_hour",
     "license": "MIT",
     "authors": [
         {
-            "name": "Alex Renoki",
-            "email": "rennokki@gmail.com",
-            "homepage": "https://twitter.com/rennokki",
+            "name": "XisoDev",
+            "email": "ceo@amuz.co.kr",
+            "homepage": "https://amuz.co.kr",
             "role": "Developer"
         }
     ],
     "require": {
-        "laravel/framework": "~5.5"
+        "laravel/framework": "9.*"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2|^7.0",
@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rennokki\\Schedule\\": "src"
+            "XisoDev\\WorkingHours\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rennokki\\Schedule\\Test\\": "tests"
+            "XisoDev\\WorkingHours\\Test\\": "tests"
         }
     },
     "scripts": {
@@ -44,7 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Rennokki\\Schedule\\ScheduleServiceProvider"
+                "XisoDev\\WorkingHours\\ScheduleServiceProvider"
             ]
         }
     },

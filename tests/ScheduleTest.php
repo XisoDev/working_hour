@@ -1,6 +1,6 @@
 <?php
 
-namespace Rennokki\Schedule\Test;
+namespace XisoDev\WorkingHours\Test;
 
 use Carbon\Carbon;
 
@@ -17,7 +17,7 @@ class ScheduleTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Schedule\Test\Models\User::class)->create();
+        $this->user = factory(\XisoDev\WorkingHours\Test\Models\User::class)->create();
     }
 
     public function testCreateSchedule()

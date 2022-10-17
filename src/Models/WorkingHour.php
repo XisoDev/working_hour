@@ -1,12 +1,11 @@
 <?php
 
-namespace Rennokki\Schedule\Models;
+namespace XisoDev\WorkingHours\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ScheduleModel extends Model
+class WorkingHour extends Model
 {
-    protected $table = 'schedules';
     protected $guarded = [];
     protected $casts = [
         'schedule' => 'array',

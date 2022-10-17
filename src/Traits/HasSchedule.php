@@ -1,9 +1,9 @@
 <?php
 
-namespace Rennokki\Schedule\Traits;
+namespace XisoDev\WorkingHours\Traits;
 
 use Carbon\Carbon;
-use Rennokki\Schedule\TimeRange;
+use XisoDev\WorkingHours\TimeRange;
 
 trait HasSchedule
 {

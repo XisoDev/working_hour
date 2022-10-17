@@ -1,6 +1,6 @@
 <?php
 
-namespace Rennokki\Schedule;
+namespace XisoDev\WorkingHours;
 
 use Carbon\Carbon;
 

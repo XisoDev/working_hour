@@ -11,6 +11,6 @@ return [
      * I'm just some text. I can't stop you.
      */
 
-    'model' => \Rennokki\Schedule\Models\ScheduleModel::class,
+    'model' => \XisoDev\WorkingHours\Models\WorkingHour::class,
 
 ];

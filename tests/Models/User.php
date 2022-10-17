@@ -1,9 +1,9 @@
 <?php
 
-namespace Rennokki\Schedule\Test\Models;
+namespace XisoDev\WorkingHours\Test\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Rennokki\Schedule\Traits\HasSchedule;
+use XisoDev\WorkingHours\Traits\HasSchedule;
 
 class User extends Model
 {

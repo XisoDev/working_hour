@@ -13,14 +13,14 @@ class Schedules extends Migration
      */
     public function up()
     {
-        Schema::create('schedules', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('working_hours', function (Blueprint $table) {
+            $table->id();
 
-            $table->integer('model_id');
+            $table->unsignedBigInteger('model_id')->index();
             $table->string('model_type');
 
-            $table->text('schedule')->nullable();
-            $table->text('exclusions')->nullable();
+            $table->json('schedule')->nullable();
+            $table->json('exclusions')->nullable();
 
             $table->timestamps();
         });

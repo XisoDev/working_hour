@@ -1,6 +1,6 @@
 <?php
 
-namespace Rennokki\Schedule;
+namespace XisoDev\WorkingHours;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +14,7 @@ class ScheduleServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/schedule.php' => config_path('schedule.php'),
+            __DIR__.'/../config/working_hours.php' => config_path('working_hours.php'),
         ], 'config');
 
         $this->publishes([

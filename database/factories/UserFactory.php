@@ -10,7 +10,7 @@
 |
 */
 
-$factory->define(\Rennokki\Schedule\Test\Models\User::class, function () {
+$factory->define(\XisoDev\WorkingHours\Test\Models\User::class, function () {
     return [
         'name' => 'Name'.str_random(5),
         'email' => str_random(5).'@gmail.com',

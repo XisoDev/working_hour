@@ -1,9 +1,9 @@
 <?php
 
-namespace Rennokki\Schedule\Test;
+namespace XisoDev\WorkingHours\Test;
 
-use Rennokki\Schedule\Test\Models\User;
-use Rennokki\Schedule\Models\ScheduleModel;
+use XisoDev\WorkingHours\Test\Models\User;
+use XisoDev\WorkingHours\Models\ScheduleModel;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -22,7 +22,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            \Rennokki\Schedule\ScheduleServiceProvider::class,
+            \XisoDev\WorkingHours\ScheduleServiceProvider::class,
         ];
     }
 

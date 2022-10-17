@@ -22,7 +22,7 @@ $ composer require rennokki/schedule
 
 For versions of Laravel that doesn't support package discovery, you should add this to your `config/app.php` file, in the `providers` array:
 ```php
-\Rennokki\Schedule\ScheduleServiceProvider::class,
+\XisoDev\WorkingHours\ScheduleServiceProvider::class,
 ```
 
 Publish the migration file and the config file.
@@ -37,7 +37,7 @@ $ php artisan migrate
 
 Add the trait to your model.
 ```php
-use Rennokki\Schedule\Traits\HasSchedule;
+use XisoDev\WorkingHours\Traits\HasSchedule;
 
 class User extends Model {
     use HasSchedule;
