@@ -13,13 +13,7 @@ class ScheduleServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../config/working_hours.php' => config_path('working_hours.php'),
-        ], 'config');
-
-        $this->publishes([
-            __DIR__.'/../database/migrations/2018_05_19_135648_schedules.php' => database_path('migrations/2018_05_19_135648_schedules.php'),
-        ], 'migration');
+        $this->registerPublishables();
     }
 
     /**
@@ -30,5 +24,17 @@ class ScheduleServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+
+    protected function registerPublishables(): void
+    {
+        $this->publishes([
+            __DIR__.'/../config/working_hours.php' => config_path('working_hours.php'),
+        ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/2018_05_19_135648_schedules.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_working_hours.php'),
+        ], 'migration');
     }
 }
