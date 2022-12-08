@@ -4,6 +4,7 @@ namespace XisoDev\WorkingHours\Traits;
 
 use Carbon\Carbon;
 use XisoDev\WorkingHours\TimeRange;
+use Spatie\OpeningHours\OpeningHours;
 
 trait HasSchedule
 {
@@ -14,14 +15,9 @@ trait HasSchedule
 
     protected $carbonInstance = Carbon::class;
 
-    /**
-     * Returns a morphOne relationship class of the schedule.
-     *
-     * @return morphOne The relatinship.
-     */
     public function schedule()
     {
-        return $this->morphOne(config('schedule.model'), 'model');
+        return $this->morphOne(config('working_hours.model'), 'model');
     }
 
     /**
@@ -66,7 +62,7 @@ trait HasSchedule
             return $this->updateSchedule($scheduleArray);
         }
 
-        $model = config('schedule.model');
+        $model = config('working_hours.model');
 
         $this->schedule()->save(new $model([
             'schedule' => $this->normalizeScheduleArray($scheduleArray),
@@ -148,201 +144,30 @@ trait HasSchedule
         return $this->getExclusions();
     }
 
-    /**
-     * Check if the model is available on a certain day/date.
-     *
-     * @param string|Carbon|DateTime $dateOrDay The datetime, date or the day.
-     * @return bool Wether it is available on that day.
-     */
-    public function isAvailableOn($dateOrDay): bool
+    public function isAvailableOn(Carbon $date): bool
     {
-        if (in_array($dateOrDay, Self::$availableDays)) {
-            return (bool) (count($this->getSchedule()[$dateOrDay]) > 0);
-        }
-
-        if ($dateOrDay instanceof $this->carbonInstance) {
-            if ($this->isExcludedOn($dateOrDay->toDateString())) {
-                if (count($this->getExcludedTimeRangesOn($dateOrDay->toDateString())) != 0) {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return (bool) (count($this->getSchedule()[strtolower($this->carbonInstance::parse($dateOrDay)->format('l'))]) > 0);
-        }
-
-        if ($this->isValidMonthDay($dateOrDay) || $this->isValidYearMonthDay($dateOrDay)) {
-            if ($this->isExcludedOn($dateOrDay)) {
-                if (count($this->getExcludedTimeRangesOn($dateOrDay)) != 0) {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return (bool) (count($this->getSchedule()[strtolower($this->getCarbonDateFromString($dateOrDay)->format('l'))]) > 0);
-        }
-
-        return false;
+        $scheduleArray = $this->getSchedule();
+        $spatieObject = OpeningHours::create($scheduleArray ?? []);
+        return $spatieObject->isOpenOn($date->format("Y-m-d"));
     }
 
-    /**
-     * Check if the model is unavailable on a certain day/date.
-     *
-     * @param string|Carbon|DateTime $dateOrDay The datetime, date or the day.
-     * @return bool Wether it is unavailable on that day.
-     */
-    public function isUnavailableOn($dateOrDay): bool
+    public function isUnavailableOn(Carbon $date): bool
     {
-        return (bool) ! $this->isAvailableOn($dateOrDay);
+        return (bool) ! $this->isAvailableOn($date);
     }
 
-    /**
-     * Check if the model is available on a certain day/date and time.
-     *
-     * @param string|Carbon|DateTime $dateOrDay The datetime, date or the day.
-     * @param string The time.
-     * @return bool Wether it is available on that day, at a certain time.
-     */
-    public function isAvailableOnAt($dateOrDay, $time): bool
+    public function isAvailableOnAt(Carbon $dateTime): bool
     {
-        $timeRanges = null;
-
-        if (in_array($dateOrDay, Self::$availableDays)) {
-            $timeRanges = $this->getSchedule()[$dateOrDay];
-        }
-
-        if ($dateOrDay instanceof $this->carbonInstance) {
-            $timeRanges = $this->getSchedule()[strtolower($this->carbonInstance::parse($dateOrDay)->format('l'))];
-
-            if ($this->isExcludedOn($dateOrDay->toDateString())) {
-                $timeRanges = $this->getExcludedTimeRangesOn($dateOrDay->toDateString());
-            }
-        }
-
-        if ($this->isValidMonthDay($dateOrDay) || $this->isValidYearMonthDay($dateOrDay)) {
-            $timeRanges = $this->getSchedule()[strtolower($this->getCarbonDateFromString($dateOrDay)->format('l'))];
-
-            if ($this->isExcludedOn($dateOrDay)) {
-                $timeRanges = $this->getExcludedTimeRangesOn($dateOrDay);
-            }
-        }
-
-        if (! $timeRanges) {
-            return false;
-        }
-
-        foreach ($timeRanges as $timeRange) {
-            $timeRange = new TimeRange($timeRange, $this->carbonInstance);
-
-            if ($timeRange->isInTimeRange($time)) {
-                return true;
-            }
-        }
-
-        return false;
+        $scheduleArray = $this->getSchedule();
+        $spatieObject = OpeningHours::create($scheduleArray ?? []);
+        return $spatieObject->isOpenAt($dateTime->toDateTime());
     }
 
-    /**
-     * Check if the model is unavailable on a certain day/date and time.
-     *
-     * @param string|Carbon|DateTime $dateOrDay The datetime, date or the day.
-     * @param string The time.
-     * @return bool Wether it is unavailable on that day, at a certain time.
-     */
-    public function isUnavailableOnAt($dateOrDay, $time): bool
+    public function isUnavailableOnAt(Carbon $dateTime): bool
     {
-        return (bool) ! $this->isAvailableOnAt($dateOrDay, $time);
+        return (bool) ! $this->isAvailableOnAt($dateTime);
     }
 
-    /**
-     * Get the amount of hours on a certain day.
-     *
-     * @param string|Carbon|DateTime $dateOrDay The datetime, date or the day.
-     * @return int The amount of hours on that day.
-     */
-    public function getHoursOn($dateOrDay): int
-    {
-        $totalHours = 0;
-        $timeRanges = null;
-
-        if (in_array($dateOrDay, Self::$availableDays)) {
-            $timeRanges = $this->getSchedule()[$dateOrDay];
-        }
-
-        if ($dateOrDay instanceof $this->carbonInstance) {
-            $timeRanges = $this->getSchedule()[strtolower($this->carbonInstance::parse($dateOrDay)->format('l'))];
-
-            if ($this->isExcludedOn($dateOrDay->toDateString())) {
-                $timeRanges = $this->getExcludedTimeRangesOn($dateOrDay->toDateString());
-            }
-        }
-
-        if ($this->isValidMonthDay($dateOrDay) || $this->isValidYearMonthDay($dateOrDay)) {
-            $timeRanges = $this->getSchedule()[strtolower($this->getCarbonDateFromString($dateOrDay)->format('l'))];
-
-            if ($this->isExcludedOn($dateOrDay)) {
-                $timeRanges = $this->getExcludedTimeRangesOn($dateOrDay);
-            }
-        }
-
-        if (! $timeRanges) {
-            return 0;
-        }
-
-        foreach ($timeRanges as $timeRange) {
-            $timeRange = new TimeRange($timeRange, $this->carbonInstance);
-
-            $totalHours += (int) $timeRange->diffInHours();
-        }
-
-        return (int) $totalHours;
-    }
-
-    /**
-     * Get the amount of minutes on a certain day.
-     *
-     * @param string|Carbon|DateTime $dateOrDay The datetime, date or the day.
-     * @return int The amount of minutes on that day.
-     */
-    public function getMinutesOn($dateOrDay): int
-    {
-        $totalMinutes = 0;
-        $timeRanges = null;
-
-        if (in_array($dateOrDay, Self::$availableDays)) {
-            $timeRanges = $this->getSchedule()[$dateOrDay];
-        }
-
-        if ($dateOrDay instanceof $this->carbonInstance) {
-            $timeRanges = $this->getSchedule()[strtolower($this->carbonInstance::parse($dateOrDay)->format('l'))];
-
-            if ($this->isExcludedOn($dateOrDay->toDateString())) {
-                $timeRanges = $this->getExcludedTimeRangesOn($dateOrDay->toDateString());
-            }
-        }
-
-        if ($this->isValidMonthDay($dateOrDay) || $this->isValidYearMonthDay($dateOrDay)) {
-            $timeRanges = $this->getSchedule()[strtolower($this->getCarbonDateFromString($dateOrDay)->format('l'))];
-
-            if ($this->isExcludedOn($dateOrDay)) {
-                $timeRanges = $this->getExcludedTimeRangesOn($dateOrDay);
-            }
-        }
-
-        if (! $timeRanges) {
-            return 0;
-        }
-
-        foreach ($timeRanges as $timeRange) {
-            $timeRange = new TimeRange($timeRange, $this->carbonInstance);
-
-            $totalMinutes += (int) $timeRange->diffInMinutes();
-        }
-
-        return (int) $totalMinutes;
-    }
 
     /**
      * Get the time ranges for a particular excluded date.

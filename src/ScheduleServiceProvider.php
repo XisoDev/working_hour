@@ -14,6 +14,8 @@ class ScheduleServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPublishables();
+        $this->loadMigrationsFrom(__DIR__ . "/../database/migrations");
+        $this->mergeConfigFrom(__DIR__ . "/../config/working_hours.php",'working_hours');
     }
 
     /**
@@ -34,7 +36,7 @@ class ScheduleServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../database/migrations/2018_05_19_135648_schedules.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_working_hours.php'),
+            __DIR__.'/../database/migrations/2022_10_17_135648_working_hours.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_working_hours.php'),
         ], 'migration');
     }
 }

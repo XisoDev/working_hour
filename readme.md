@@ -1,14 +1,4 @@
-[![Build Status](https://travis-ci.org/rennokki/schedule.svg?branch=master)](https://travis-ci.org/rennokki/schedule)
-[![codecov](https://codecov.io/gh/rennokki/schedule/branch/master/graph/badge.svg)](https://codecov.io/gh/rennokki/schedule/branch/master)
-[![StyleCI](https://github.styleci.io/repos/134363104/shield?branch=master)](https://github.styleci.io/repos/134363104)
-[![Latest Stable Version](https://poser.pugx.org/rennokki/schedule/v/stable)](https://packagist.org/packages/rennokki/schedule)
-[![Total Downloads](https://poser.pugx.org/rennokki/schedule/downloads)](https://packagist.org/packages/rennokki/schedule)
-[![Monthly Downloads](https://poser.pugx.org/rennokki/schedule/d/monthly)](https://packagist.org/packages/rennokki/schedule)
-[![License](https://poser.pugx.org/rennokki/schedule/license)](https://packagist.org/packages/rennokki/schedule)
-
-[![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
-
-# Schedule
+# Working_hours from schedule.
 Schedule is a package that helps tracking schedules for your models. If you have workers in a company, you can set schedules for them and see their availability though the time.
 
 # Inspiration
@@ -17,7 +7,7 @@ This package is inspired from [Spatie's Opening Hours](https://github.com/spatie
 # Installation
 Install the package via Composer CLI:
 ```bash
-$ composer require rennokki/schedule
+$ composer require xisodev/working_hours
 ```
 
 For versions of Laravel that doesn't support package discovery, you should add this to your `config/app.php` file, in the `providers` array:
@@ -27,7 +17,7 @@ For versions of Laravel that doesn't support package discovery, you should add t
 
 Publish the migration file and the config file.
 ```bash
-$ php artisan vendor:publish
+$ php artisan vendor:publish --provider="XisoDev\WorkingHours\ScheduleServiceProvider"
 ```
 
 Migrate the database.

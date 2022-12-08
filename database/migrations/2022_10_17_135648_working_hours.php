@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('working_hours', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('model_id')->index();
-            $table->string('model_type');
+            $table->morphs('model');
 
             $table->json('schedule')->nullable();
             $table->json('exclusions')->nullable();
