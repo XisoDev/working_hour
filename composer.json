@@ -22,7 +22,8 @@
         }
     ],
     "require": {
-        "laravel/framework": "9.*"
+        "laravel/framework": "9.*",
+        "spatie/opening-hours": "^2.13"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2|^7.0",
